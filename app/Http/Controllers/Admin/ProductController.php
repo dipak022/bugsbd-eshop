@@ -21,22 +21,22 @@ class ProductController extends Controller
         return view('backend.product.manage',compact('products'));
     }
 
-    public function sliderStatus(Request $request){
+    public function ProductStatus(Request $request){
         if($request->mode == 'true'){
-            $status = DB::table('sliders')->where('id',$request->id)->update(['active'=>1]);
+            $status = DB::table('products')->where('id',$request->id)->update(['active'=>1]);
         }else{
-            $status = DB::table('sliders')->where('id',$request->id)->update(['active'=>0]);
+            $status = DB::table('products')->where('id',$request->id)->update(['active'=>0]);
         }
         if ($status) {
             $notification = array(
-                'message' => 'sliders Delete Successfully.',
+                'message' => 'products Delete Successfully.',
                 'alert-type' => 'success'
             );
             return redirect()->back()->with($notification);
         }
         else{
             $notification = array(
-                'message' => 'sliders Change Unuccessfully',
+                'message' => 'products Change Unuccessfully',
                 'alert-type' => 'danger'
             );
             return redirect()->back()->with($notification);
@@ -136,50 +136,52 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $Slider = Slider::find($id);
-        if($Slider){
+        $Product = Product::find($id);
+        if($Product){
             $image=$request->file('image');
             if($image){
                 $image_upload= hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
                 Image::make($image)->resize(150,150)->save('Slider/Image/'.$image_upload);
                 $imgUrl ='Slider/Image/'.$image_upload;
 
-                $Slider->image = $imgUrl;  
-                $Slider->title_first = $request->title_first;
-                $Slider->title_second = $request->title_second;
-                $Slider->title_third = $request->title_third;
-                $Slider->sub_title = $request->sub_title;
-                $Slider->active = $request->active;
-                $done = $Slider->save();
+                $Product->image = $imgUrl; 
+                $Product->title = $request->title;
+                $Product->sammary = $request->sammary;
+                $Product->description = $request->description;
+                $Product->cat_id = $request->cat_id;
+                $Product->bid_price = $request->bid_price;
+                $Product->active = $request->active;
+                $done = $Product->save();
                 if ($done) {
                     $notification = array(
-                        'message' => 'Slider Update Successfully.',
+                        'message' => 'Product Update Successfully.',
                         'alert-type' => 'success'
                     );
                     return redirect()->back()->with($notification);
                 }else{
                     $notification = array(
-                        'message' => 'Slider Update Unuccessfully',
+                        'message' => 'Product Update Unuccessfully',
                         'alert-type' => 'danger'
                     );
                     return redirect()->back()->with($notification);
                 }
             }else{
-                $Slider->title_first = $request->title_first;
-                $Slider->title_second = $request->title_second;
-                $Slider->title_third = $request->title_third;
-                $Slider->sub_title = $request->sub_title;
-                $Slider->active = $request->active;
-                $done = $Slider->save();
+                $Product->title = $request->title;
+                $Product->sammary = $request->sammary;
+                $Product->description = $request->description;
+                $Product->cat_id = $request->cat_id;
+                $Product->bid_price = $request->bid_price;
+                $Product->active = $request->active;
+                $done = $Product->save();
                 if ($done) {
                     $notification = array(
-                        'message' => 'Slider Update Successfully.',
+                        'message' => 'Product Update Successfully.',
                         'alert-type' => 'success'
                     );
                     return redirect()->back()->with($notification);
                 }else{
                     $notification = array(
-                        'message' => 'Slider Update Unuccessfully',
+                        'message' => 'Product Update Unuccessfully',
                         'alert-type' => 'danger'
                     );
                     return redirect()->back()->with($notification);
@@ -196,19 +198,19 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $Slider = Slider::find($id);
-        if($Slider){
-            $status = $Slider->delete();
+        $Product = Product::find($id);
+        if($Product){
+            $status = $Product->delete();
             if ($status) {
                 $notification = array(
-                    'message' => 'Slider Delete Successfully.',
+                    'message' => 'Product Delete Successfully.',
                     'alert-type' => 'success'
                 );
-                return redirect()->route('slider.index')->with($notification);
+                return redirect()->route('product.index')->with($notification);
             }
         }else{
             $notification = array(
-                'message' => 'Slider Delete Unsuccessfully',
+                'message' => 'Product Delete Unsuccessfully',
                 'alert-type' => 'danger'
             );
             return redirect()->back()->with($notification);

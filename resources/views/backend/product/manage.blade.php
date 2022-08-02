@@ -46,7 +46,7 @@ Product Manage
 
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Total  Slider: {{\App\Models\Product::count()}} </h3>
+                <h3 class="card-title">Total  Product: {{\App\Models\Product::count()}} </h3>
                 <div class="pull-right" style="text-align:right;">
                     <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#branch-info">
                     Add Product
@@ -96,7 +96,7 @@ Product Manage
                               </i>
                               Edit
                             </a>
-                            <form class="float-left px-2" action="{{ route('slider.destroy',$item->id) }}" method="POST">
+                            <form class="float-left px-2" action="{{ route('product.destroy',$item->id) }}" method="POST">
                                 @csrf 
                                 @method('delete')
                                 <a type="button" data-type="confirm" class="dltBtn btn-sm btn-danger js-sweetalert" title="Delete">
@@ -143,7 +143,7 @@ Product Manage
 
                                           <div class="form-group">
                                               <label> Title :</label>
-                                              <input type="text" class="form-control @error('title') is-invalid @enderror" placeholder="Enter Title" name="title" value="{{old('title')}}" />
+                                              <input type="text" class="form-control @error('title') is-invalid @enderror" placeholder="Enter Title" name="title" value="{{ $item->title }}" />
                                               @error('title')
                                                 <span class="invalid-feedback" role="alert">
                                                   <strong>{{ $message }}</strong>
@@ -152,7 +152,7 @@ Product Manage
                                           </div>
                                           <div class="form-group">
                                               <label>sammary :</label>
-                                              <input type="text" class="form-control @error('sammary') is-invalid @enderror" placeholder="Enter sammary" name="sammary" value="{{old('sammary')}}" />
+                                              <input type="text" class="form-control @error('sammary') is-invalid @enderror" placeholder="Enter sammary" name="sammary" value="{{$item->sammary}}" />
                                               @error('sammary')
                                                 <span class="invalid-feedback" role="alert">
                                                   <strong>{{ $message }}</strong>
@@ -161,7 +161,7 @@ Product Manage
                                           </div>
                                           <div class="form-group">
                                               <label>description :</label>
-                                              <input type="text" class="form-control @error('description') is-invalid @enderror" placeholder="Enter description" name="description" value="{{old('description')}}" />
+                                              <input type="text" class="form-control @error('description') is-invalid @enderror" placeholder="Enter description" name="description" value="{{$item->description}}" />
                                               @error('description')
                                                 <span class="invalid-feedback" role="alert">
                                                   <strong>{{ $message }}</strong>
@@ -170,7 +170,7 @@ Product Manage
                                           </div>
                                           <div class="form-group">
                                               <label>Bid price :</label>
-                                              <input type="text" class="form-control @error('bid_price') is-invalid @enderror" placeholder="Enter Price" name="bid_price" value="{{old('bid_price')}}" />
+                                              <input type="text" class="form-control @error('bid_price') is-invalid @enderror" placeholder="Enter Price" name="bid_price" value="{{$item->bid_price}}" />
                                               @error('description')
                                                 <span class="invalid-feedback" role="alert">
                                                   <strong>{{ $message }}</strong>
@@ -217,16 +217,15 @@ Product Manage
                            <!-- branch Show model start --> 
                         <div class="modal fade" id="show_{{$item->id}}">
                             @php
-                    
                                 $product=DB::table('products')
-        ->join('categories','products.cat_id','categories.id')
-        ->select('products.*','categories.category_name')
-        ->where('products.id',$item->id)->first();
+                                  ->join('categories','products.cat_id','categories.id')
+                                  ->select('products.*','categories.category_name')
+                                  ->where('products.id',$item->id)->first();
                             @endphp
                             <div class="modal-dialog">
                             <div class="modal-content bg-info">
                                 <div class="modal-header">
-                                <h4 class="modal-title">View Slider </h4>
+                                <h4 class="modal-title">View Product </h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -237,21 +236,21 @@ Product Manage
                                     <div class="modal-body">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <strong>Title first :</strong>
+                                            <strong>Title :</strong>
                                             <p>{{ $product->title }}</p>
                                         </div>
                                         <div class="col-md-6">
-                                            <strong>Title Second :</strong>
+                                            <strong>Sammary :</strong>
                                             <p>{{ $product->sammary }}</p>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <strong>Title Third :</strong>
+                                            <strong>description :</strong>
                                             <p>{{ $product->description }}</p>
                                         </div>
                                         <div class="col-md-6">
-                                            <strong>Sub Title :</strong>
+                                            <strong>Bid price :</strong>
                                             <p>{{ $product->bid_price }}</p>
                                         </div>
                                     </div>
@@ -457,7 +456,7 @@ $('input[name=toogle]').change(function(){
    var id = $(this).val();
    //alert(id);
    $.ajax({
-       url:"{{ route('slider.status')}}",
+       url:"{{ route('product.status')}}",
        type:"POST",
        data:{
            _token:'{{csrf_token()}}',
